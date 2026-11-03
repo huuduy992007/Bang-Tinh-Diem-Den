@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f3f4f1" id="metaThemeColor" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Bida 369" />
+  <title>Bảng Điểm Bida 3-6-9</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23f2b705'/%3E%3Cpath d='M4 9h24v14H4z' fill='%23f2b705'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23fff'/%3E%3Ctext x='16' y='20' font-size='10' font-weight='700' text-anchor='middle' font-family='sans-serif'%3E9%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    // Apply saved theme before first paint to avoid a flash
+    try {
+      const pref = JSON.parse(localStorage.getItem("bida_369_prefs_v1") || "{}");
+      if (pref.theme === "light" || pref.theme === "dark") document.documentElement.dataset.theme = pref.theme;
+    } catch (e) {}
+  </script>
+  <style>
+    /* ====================================================================== */
+    /* DESIGN TOKENS (LIGHT DEFAULT, DARK VIA SYSTEM OR MANUAL TOGGLE)         */
+    /* ====================================================================== */
+    :root {
+      color-scheme: light;
+      --bg: #f3f4f1;
+      --bar-bg: rgba(243, 244, 241, 0.88);
+      --surface: #ffffff;
+      --surface-2: #f2f4f0;
+      --line: #e2e6df;
+      --text: #121814;
+      --muted: #69736c;
+      --felt: #0b7a4b;
+      --felt-press: #086640;
+      --felt-shade: #065233;
+      --felt-soft: #e2f3e9;
+      --pos: #0b7a4b;
+      --neg: #c62828;
+      --neg-soft: #fcebea;
+      --neg-line: #f3c3c0;
+      --warn: #a85a00;
+      --warn-soft: #fff3dc;
+      --ink: #121814;
+      --ink-text: #ffffff;
+      --shadow: 0 1px 2px rgba(16, 24, 20, 0.05), 0 4px 14px rgba(16, 24, 20, 0.05);
+      --shadow-lg: 0 12px 40px rgba(16, 24, 20, 0.18);
+      --radius: 20px;
+      --bb-h: 0px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --bg: #0b100d;
+        --bar-bg: rgba(11, 16, 13, 0.86);
+        --surface: #141b17;
+        --surface-2: #1b241f;
+        --line: #25302a;
+        --text: #edf3ee;
+        --muted: #8f9c94;
+        --felt: #178f58;
+        --felt-press: #12784a;
+        --felt-shade: #0a4d2f;
+        --felt-soft: #13301f;
+        --pos: #3fd08d;
+        --neg: #ff6b66;
+        --neg-soft: #33191a;
+        --neg-line: #5a2a2a;
+        --warn: #f5a524;
+        --warn-soft: #33260f;
+        --ink: #edf3ee;
+        --ink-text: #0b100d;
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
+      }
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #0b100d;
+      --bar-bg: rgba(11, 16, 13, 0.86);
+      --surface: #141b17;
+      --surface-2: #1b241f;
+      --line: #25302a;
+      --text: #edf3ee;
+      --muted: #8f9c94;
+      --felt: #178f58;
+      --felt-press: #12784a;
+      --felt-shade: #0a4d2f;
+      --felt-soft: #13301f;
+      --pos: #3fd08d;
+      --neg: #ff6b66;
+      --neg-soft: #33191a;
+      --neg-line: #5a2a2a;
+      --warn: #f5a524;
+      --warn-soft: #33260f;
+      --ink: #edf3ee;
+      --ink-text: #0b100d;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    /* ====================================================================== */
+    /* BASE                                                                   */
+    /* ====================================================================== */
+    *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    [hidden] { display: none !important; }
+    html, body { margin: 0; }
+    body {
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      touch-action: manipulation;
+      min-height: 100vh;
+      padding-bottom: calc(var(--bb-h) + env(safe-area-inset-bottom) + 24px);
+    }
+    button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
+    button:disabled { cursor: default; }
+    button:focus-visible, input:focus-visible { outline: 3px solid var(--felt); outline-offset: 2px; }
+    .num { font-variant-numeric: tabular-nums; }
+    .wrap { max-width: 480px; margin: 0 auto; padding: 0 14px; }
+    .ic { width: 20px; height: 20px; flex-shrink: 0; }
+
+    /* ====================================================================== */
+    /* TOP BAR + STATUS STRIP                                                 */
+    /* ====================================================================== */
+    .topbar {
+      position: sticky; top: 0; z-index: 30;
+      background: var(--bar-bg);
+      -webkit-backdrop-filter: saturate(1.6) blur(14px);
+      backdrop-filter: saturate(1.6) blur(14px);
+      padding-top: env(safe-area-inset-top);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 10px; padding-bottom: 8px; }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .brand svg { width: 34px; height: 34px; flex-shrink: 0; }
+    .brand h1 { margin: 0; font-size: 17px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.2; }
+    .brand p { margin: 0; font-size: 12px; color: var(--muted); font-weight: 500; }
+    .top-actions { display: flex; gap: 6px; }
+    .icon-btn {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: grid; place-items: center;
+      background: var(--surface); border: 1px solid var(--line); color: var(--text);
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .icon-btn[aria-pressed="true"] { background: var(--felt-soft); color: var(--pos); border-color: transparent; }
+    .icon-btn:active { transform: scale(.94); }
+    .icon-btn:disabled { opacity: .35; }
+
+    .status {
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; gap: 8px;
+      min-height: 40px; margin-bottom: 10px; padding: 6px 6px 6px 12px;
+      border-radius: 12px; font-size: 13px; font-weight: 600;
+      transition: background .2s, color .2s;
+    }
+    .status b { font-weight: 800; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+    .status-text { flex: 1; min-width: 0; }
+    .status-btn {
+      border: 0; border-radius: 9px; padding: 7px 11px; font-size: 12px; font-weight: 700;
+      background: var(--surface); color: inherit; box-shadow: var(--shadow); white-space: nowrap;
+    }
+    .status-progress { position: absolute; left: 0; bottom: 0; height: 3px; background: currentColor; opacity: .55; transition: width .25s linear; }
+    .status.is-ok { background: var(--felt-soft); color: var(--pos); }
+    .status.is-pending { background: var(--warn-soft); color: var(--warn); }
+    .status.is-pending .status-dot { animation: blink 1s infinite; }
+    .status.is-alert { background: var(--neg-soft); color: var(--neg); }
+
+    /* ====================================================================== */
+    /* PLAYER CARDS                                                           */
+    /* ====================================================================== */
+    /* Players fill exactly one screen below the top bar; cards share the height
+       and everything inside scales with the card height (container query units) */
+    .players {
+      display: flex; flex-direction: column; gap: 6px; padding: 8px 0;
+      min-height: calc(100vh - var(--top-h, 110px));
+      min-height: calc(100dvh - var(--top-h, 110px));
+    }
+    .player {
+      flex: 1 1 0; min-height: 112px;
+      container-type: size;
+      /* Each card is tinted with its player's ball color (--tint set inline) */
+      background: color-mix(in srgb, var(--tint, transparent) 14%, var(--surface));
+      border: 1.5px solid color-mix(in srgb, var(--tint, transparent) 45%, var(--line));
+      border-radius: var(--radius); padding: 8px; box-shadow: var(--shadow);
+    }
+    .player-inner { height: 100%; display: flex; flex-direction: column; }
+    /* Card layout: plus row on top, big centered score, minus row below */
+    .player-mid { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; padding: 0 40px; }
+    .player-id {
+      display: flex; align-items: center; justify-content: center; gap: 8px; max-width: 100%;
+      background: color-mix(in srgb, var(--tint, transparent) 26%, var(--surface));
+      border: 0; padding: 4px 14px 4px 5px; border-radius: 99px;
+    }
+    .player-id:active { filter: brightness(.95); }
+    .player-id .ball { width: 28px; height: 28px; }
+    .player-id .ball i { width: 15px; height: 15px; font-size: 9px; }
+    .pname { display: flex; align-items: center; gap: 6px; font-size: clamp(16px, 9cqh, 21px); font-weight: 800; letter-spacing: -0.01em; min-width: 0; color: var(--text); }
+    .pname span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pname .ic { width: 14px; height: 14px; color: var(--muted); }
+    .btn-del {
+      position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+      width: 36px; height: 36px; border-radius: 12px; border: 0;
+      display: grid; place-items: center;
+      background: color-mix(in srgb, var(--surface) 70%, transparent); color: var(--muted);
+    }
+    .btn-del .ic { width: 18px; height: 18px; }
+    .btn-del:active { background: var(--neg-soft); color: var(--neg); }
+    .pname .crown { width: 16px; height: 16px; color: #e0a100; }
+    .plast { font-size: 12px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+
+    .score {
+      position: relative;
+      font-size: clamp(32px, 30cqh, 96px); font-weight: 800; line-height: 1; letter-spacing: -0.04em;
+      font-variant-numeric: tabular-nums;
+    }
+    .score small { font-size: .32em; font-weight: 700; margin-left: 3px; opacity: .55; letter-spacing: 0; }
+    .score.pos { color: var(--pos); }
+    .score.neg { color: var(--neg); }
+    .score.zero { color: var(--muted); }
+    .score.bump { animation: bump .32s ease-out; }
+    .fly {
+      position: absolute; left: 100%; top: 0; margin-left: 6px;
+      font-size: 22px; font-weight: 800; letter-spacing: 0;
+      pointer-events: none; animation: fly .8s ease-out forwards;
+    }
+    .fly.pos { color: var(--pos); }
+    .fly.neg { color: var(--neg); }
+
+    /* Ball avatars — colored like pool balls, stripes from #9 */
+    .ball {
+      --ball: #9aa39d;
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      display: grid; place-items: center;
+      background: var(--ball);
+      box-shadow: inset -3px -4px 0 rgba(0,0,0,.16), inset 2px 3px 0 rgba(255,255,255,.22);
+    }
+    .ball.stripe { background: linear-gradient(#fff 0 23%, var(--ball) 23% 77%, #fff 77%); box-shadow: inset 0 0 0 1px rgba(0,0,0,.08), inset -3px -4px 0 rgba(0,0,0,.12); }
+    .ball i {
+      width: 19px; height: 19px; border-radius: 50%; background: #fff; color: #111;
+      font-style: normal; font-size: 10px; font-weight: 800;
+      display: grid; place-items: center; line-height: 1;
+    }
+    .ball.sm { width: 22px; height: 22px; box-shadow: inset -2px -2px 0 rgba(0,0,0,.16); }
+    .ball.sm i { width: 12px; height: 12px; font-size: 7px; }
+
+    /* Score keypad rows: +1 +2 +3 above, -1 -2 -3 below */
+    .pad-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; flex-shrink: 0; }
+    .key {
+      height: clamp(34px, 22cqh, 58px); border: 0; border-radius: 12px;
+      font-size: clamp(15px, 9cqh, 21px); font-weight: 800; font-variant-numeric: tabular-nums;
+      transition: transform .07s, background .12s;
+      user-select: none; -webkit-user-select: none;
+    }
+    .key:active { transform: scale(.93); }
+    .key.minus { background: var(--surface); color: var(--neg); box-shadow: inset 0 0 0 1.5px var(--neg-line); }
+    .key.minus:active { background: var(--neg-soft); }
+    .key.plus { background: var(--felt); color: #fff; box-shadow: inset 0 -3px 0 var(--felt-shade); }
+    .key.plus:active { background: var(--felt-press); box-shadow: none; }
+
+    /* Short cards (4+ players): drop secondary text, keep name + score */
+    @container (max-height: 230px) {
+      .plast { display: none; }
+      .player-id .ball { width: 22px; height: 22px; }
+      .player-id .ball i { width: 12px; height: 12px; font-size: 7px; }
+      .pname { font-size: 16px; }
+    }
+    /* Very short cards (small phones, 4+ players): name and score share one line */
+    @container (max-height: 150px) {
+      .player-mid { flex-direction: row; gap: 8px; padding: 0 40px 0 0; }
+      .player-id { padding: 3px 10px 3px 4px; max-width: 68%; flex-shrink: 1; }
+      .pname .ic:not(.crown) { display: none; }
+    }
+
+    .add-player {
+      width: 100%; margin-top: 10px; height: 54px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      border: 1.5px dashed var(--line); border-radius: var(--radius);
+      background: transparent; color: var(--muted); font-size: 14px; font-weight: 700;
+    }
+    .add-player:active { background: var(--surface-2); }
+
+    /* ====================================================================== */
+    /* HISTORY                                                                */
+    /* ====================================================================== */
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); margin-top: 16px; }
+    .hist-head {
+      width: 100%; display: flex; align-items: center; gap: 10px;
+      background: none; border: 0; padding: 14px; text-align: left;
+    }
+    .hist-head h2 { margin: 0; font-size: 15px; font-weight: 800; }
+    .hist-head p { margin: 1px 0 0; font-size: 12px; color: var(--muted); }
+    .hist-head .grow { flex: 1; min-width: 0; }
+    .hist-head .chev { transition: transform .2s; color: var(--muted); }
+    .hist-head[aria-expanded="false"] .chev { transform: rotate(-90deg); }
+    .count-badge { font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 99px; background: var(--surface-2); color: var(--muted); }
+
+    .chips { display: flex; gap: 6px; overflow-x: auto; padding: 0 14px 10px; scrollbar-width: none; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+      height: 34px; padding: 0 12px 0 8px; border-radius: 99px;
+      border: 1px solid var(--line); background: var(--surface); font-size: 13px; font-weight: 600; color: var(--muted);
+    }
+    .chip.all { padding-left: 12px; }
+    .chip[aria-pressed="true"] { background: var(--ink); color: var(--ink-text); border-color: var(--ink); }
+    .chip .ball.sm { width: 18px; height: 18px; }
+    .chip .ball.sm i { width: 10px; height: 10px; font-size: 6px; }
+
+    .h-list { list-style: none; margin: 0; padding: 0 8px 8px; max-height: 380px; overflow-y: auto; }
+    .h-item { display: flex; align-items: center; gap: 10px; padding: 9px 6px; border-top: 1px solid var(--line); }
+    .h-item:first-child { border-top: 0; }
+    .h-time { font-size: 12px; font-weight: 600; color: var(--muted); width: 58px; flex-shrink: 0; }
+    .h-main { flex: 1; min-width: 0; }
+    .h-name { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .h-meta { font-size: 12px; color: var(--muted); }
+    .h-meta .ok { color: var(--pos); font-weight: 600; }
+    .h-meta .off { color: var(--warn); font-weight: 600; }
+    .h-delta { font-size: 15px; font-weight: 800; min-width: 44px; text-align: center; padding: 5px 8px; border-radius: 10px; }
+    .h-delta.pos { background: var(--felt-soft); color: var(--pos); }
+    .h-delta.neg { background: var(--neg-soft); color: var(--neg); }
+    .h-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 28px 12px 32px; }
+
+    /* ====================================================================== */
+    /* ACTION ROW (BELOW THE PLAYERS SCREEN)                                  */
+    /* ====================================================================== */
+    .actions { display: flex; gap: 8px; }
+    .btn-undo {
+      flex: 1; min-width: 0; height: 56px; border: 0; border-radius: 16px;
+      display: flex; align-items: center; gap: 12px; padding: 0 16px; text-align: left;
+      background: var(--ink); color: var(--ink-text);
+    }
+    .btn-undo:active:not(:disabled) { transform: scale(.98); }
+    .btn-undo:disabled { opacity: .35; }
+    .btn-undo .t1 { display: block; font-size: 15px; font-weight: 800; }
+    .btn-undo .t2 { display: block; font-size: 12px; opacity: .7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .btn-undo .txt { min-width: 0; }
+    .btn-new {
+      height: 56px; padding: 0 14px; border-radius: 16px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+      border: 1px solid var(--line); background: var(--surface); font-size: 12px; font-weight: 700;
+    }
+    .btn-new:active { background: var(--surface-2); }
+    .settings { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+    .setting-btn {
+      height: 48px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface);
+      display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; font-weight: 700;
+    }
+    .setting-btn[aria-pressed="true"] { background: var(--felt-soft); color: var(--pos); border-color: transparent; }
+    .setting-btn:active { transform: scale(.97); }
+
+    /* ====================================================================== */
+    /* IMBALANCE ALERT (FLOATS ABOVE BOTTOM BAR SO IT IS ALWAYS VISIBLE)      */
+    /* ====================================================================== */
+    .alert {
+      position: fixed; left: 0; right: 0; z-index: 35;
+      bottom: calc(var(--bb-h) + env(safe-area-inset-bottom) + 8px);
+      animation: rise .28s cubic-bezier(.2,.9,.3,1.2);
+    }
+    .alert-card {
+      background: var(--surface); border: 2px solid var(--neg); border-radius: var(--radius);
+      box-shadow: var(--shadow-lg); padding: 14px; max-height: 62vh; overflow-y: auto;
+    }
+    .alert-top { display: flex; align-items: flex-start; gap: 10px; }
+    .alert-ic { width: 36px; height: 36px; border-radius: 12px; background: var(--neg-soft); color: var(--neg); display: grid; place-items: center; flex-shrink: 0; }
+    .alert-title { font-size: 16px; font-weight: 800; color: var(--neg); }
+    .alert-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+    .alert-close { margin-left: auto; width: 36px; height: 36px; border: 0; border-radius: 10px; background: var(--surface-2); display: grid; place-items: center; color: var(--muted); flex-shrink: 0; }
+    .alert-cause { font-size: 13.5px; line-height: 1.5; margin: 12px 0 10px; }
+    .snap { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .snap-item { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 4px; border-radius: 99px; background: var(--surface-2); font-size: 12.5px; font-weight: 600; }
+    .snap-item b.pos { color: var(--pos); }
+    .snap-item b.neg { color: var(--neg); }
+    .fix-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+    .fixes { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px; }
+    .fix-btn {
+      height: 46px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2);
+      font-size: 14px; font-weight: 700; padding: 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .fix-btn b.pos { color: var(--pos); }
+    .fix-btn b.neg { color: var(--neg); }
+    .fix-btn:active { transform: scale(.96); }
+
+    /* ====================================================================== */
+    /* BOTTOM SHEETS + TOAST                                                  */
+    /* ====================================================================== */
+    .sheet-backdrop {
+      position: fixed; inset: 0; z-index: 50;
+      background: rgba(5, 10, 7, .5);
+      display: flex; align-items: flex-end;
+      animation: fade .18s ease-out;
+    }
+    .sheet {
+      width: 100%; max-width: 480px; margin: 0 auto;
+      background: var(--surface); border-radius: 24px 24px 0 0;
+      padding: 8px 18px calc(18px + env(safe-area-inset-bottom));
+      box-shadow: var(--shadow-lg);
+      animation: slideup .26s cubic-bezier(.2,.9,.3,1);
+    }
+    .sheet-handle { width: 40px; height: 5px; border-radius: 99px; background: var(--line); margin: 0 auto 14px; }
+    .sheet h3 { margin: 0 0 4px; font-size: 18px; font-weight: 800; }
+    .sheet p { margin: 0 0 16px; font-size: 14px; line-height: 1.5; color: var(--muted); }
+    .field {
+      width: 100%; height: 52px; border-radius: 14px; border: 1.5px solid var(--line);
+      background: var(--surface-2); color: var(--text); padding: 0 14px;
+      font: inherit; font-size: 16px; font-weight: 600; margin: 10px 0 16px;
+    }
+    .field:focus { outline: none; border-color: var(--felt); }
+    .sheet-actions { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; }
+    .btn { height: 52px; border-radius: 14px; border: 0; font-size: 15px; font-weight: 700; }
+    .btn.ghost { background: var(--surface-2); }
+    .btn.primary { background: var(--felt); color: #fff; }
+    .btn.danger { background: var(--neg); color: #fff; }
+    .btn:active { transform: scale(.98); }
+    .btn-link-danger {
+      display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%;
+      height: 46px; margin-top: 10px; border: 0; border-radius: 12px; background: transparent;
+      color: var(--neg); font-size: 14px; font-weight: 700;
+    }
+    .btn-link-danger[data-confirm="1"] { background: var(--neg-soft); }
+
+    .toast {
+      position: fixed; left: 50%; z-index: 60;
+      bottom: calc(var(--bb-h) + env(safe-area-inset-bottom) + 14px);
+      transform: translateX(-50%);
+      background: var(--ink); color: var(--ink-text);
+      padding: 10px 16px; border-radius: 99px; font-size: 13px; font-weight: 600;
+      box-shadow: var(--shadow-lg); white-space: nowrap; max-width: calc(100vw - 32px); overflow: hidden; text-overflow: ellipsis;
+      animation: toastIn .22s ease-out;
+    }
+
+    /* ====================================================================== */
+    /* FULLSCREEN MODE: SAME PLAYER CARDS, EVERYTHING ELSE HIDDEN             */
+    /* ====================================================================== */
+    .fs-bar { display: none; }
+    html.fs-open, html.fs-open body { overflow: hidden; }
+    html.fs-open body { padding-bottom: 0; }
+    html.fs-open .topbar, html.fs-open .actions, html.fs-open .add-player,
+    html.fs-open .settings, html.fs-open main > .card { display: none; }
+    html.fs-open .wrap { max-width: 820px; }
+    html.fs-open .fs-bar {
+      display: flex; align-items: center; gap: 8px;
+      height: calc(52px + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top);
+    }
+    .fs-sum {
+      flex: 1; min-width: 0; height: 40px; border-radius: 12px; padding: 0 12px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      font-size: 14px; font-weight: 700; background: var(--felt-soft); color: var(--pos);
+    }
+    .fs-sum.off { background: var(--neg-soft); color: var(--neg); }
+    .fs-sum b { font-weight: 800; }
+    /* Players take exactly the screen under the slim bar; cards grow, so do score and keys */
+    html.fs-open .players {
+      height: calc(100vh - 52px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      height: calc(100dvh - 52px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      min-height: 0; padding: 4px 0 8px;
+    }
+    html.fs-open .player { min-height: 0; }
+    html.fs-open .score { font-size: clamp(32px, 36cqh, 180px); }
+    html.fs-open .key { height: clamp(34px, 24cqh, 84px); font-size: clamp(15px, 11cqh, 30px); }
+    html.fs-open .pname { font-size: clamp(16px, 10cqh, 28px); }
+    /* Landscape (tablet / TV): cards side by side */
+    @media (min-aspect-ratio: 4/3) {
+      html.fs-open .wrap { max-width: none; }
+      html.fs-open .players { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; }
+    }
+
+    @keyframes bump { 0% { transform: scale(1); } 40% { transform: scale(1.14); } 100% { transform: scale(1); } }
+    @keyframes fly { 0% { opacity: 0; transform: translateY(6px); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-26px); } }
+    @keyframes blink { 50% { opacity: .25; } }
+    @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+    @keyframes slideup { from { transform: translateY(100%); } to { transform: none; } }
+    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="wrap topbar-row">
+      <div class="brand">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <defs><clipPath id="ballClip"><circle cx="16" cy="16" r="15" /></clipPath></defs>
+          <circle cx="16" cy="16" r="15" fill="#fff" />
+          <rect x="0" y="8" width="32" height="16" fill="#f2b705" clip-path="url(#ballClip)" />
+          <circle cx="16" cy="16" r="15" fill="none" stroke="rgba(0,0,0,.12)" />
+          <circle cx="16" cy="16" r="6.5" fill="#fff" />
+          <text x="16" y="19.6" font-size="10" font-weight="800" text-anchor="middle" fill="#111" font-family="sans-serif">9</text>
+        </svg>
+        <div>
+          <h1>Bida Đền 3·6·9</h1>
+          <p id="lblSubStatus">3 người chơi</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="btnFullscreen" type="button" class="icon-btn" aria-label="Chế độ toàn màn hình" title="Toàn màn hình" data-icon="expand"></button>
+        <button id="btnUndoTop" type="button" class="icon-btn" aria-label="Hoàn tác thao tác vừa rồi" title="Hoàn tác" data-icon="undo"></button>
+        <button id="btnToggleAudio" type="button" class="icon-btn" aria-pressed="true" aria-label="Bật/Tắt âm báo" title="Bật/Tắt âm báo" data-icon="volume"></button>
+      </div>
+    </div>
+    <div class="wrap">
+      <div id="statusStrip" class="status is-ok" role="status" aria-live="polite">
+        <span class="status-dot"></span>
+        <span id="txtStatus" class="status-text num">Tổng bàn <b>0đ</b> · Đã cân bằng</span>
+        <button id="btnCheckNow" type="button" class="status-btn" hidden>Kiểm tra ngay</button>
+        <i id="statusProgress" class="status-progress" style="width:0%"></i>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- SLIM BAR, ONLY IN FULLSCREEN MODE -->
+    <div class="fs-bar">
+      <button id="btnFsExit" type="button" class="icon-btn" aria-label="Thoát toàn màn hình" title="Thoát toàn màn hình" data-icon="shrink"></button>
+      <div id="fsSum" class="fs-sum num" role="status">Tổng bàn <b>0đ</b></div>
+      <button id="btnFsUndo" type="button" class="icon-btn" aria-label="Hoàn tác thao tác vừa rồi" title="Hoàn tác" data-icon="undo"></button>
+    </div>
+
+    <!-- PLAYERS -->
+    <section id="playersContainer" class="players" aria-label="Người chơi"></section>
+
+    <!-- ACTIONS & SETTINGS (BELOW THE PLAYERS SCREEN) -->
+    <section class="actions" aria-label="Thao tác">
+      <button id="btnUndoLast" type="button" class="btn-undo">
+        <span data-icon="undo"></span>
+        <span class="txt">
+          <span class="t1">Hoàn tác</span>
+          <span id="txtUndoDetail" class="t2 num">Chưa có thao tác</span>
+        </span>
+      </button>
+      <button id="btnOpenResetModal" type="button" class="btn-new">
+        <span data-icon="reset"></span>
+        Ván mới
+      </button>
+    </section>
+
+    <button id="btnOpenAddPlayer" type="button" class="add-player">
+      <span data-icon="plus"></span> Thêm người chơi
+    </button>
+
+    <section class="settings" aria-label="Tiện ích">
+      <button id="btnWake" type="button" class="setting-btn" aria-pressed="false">
+        <span data-icon="bulb"></span> Giữ sáng màn hình
+      </button>
+      <button id="btnTheme" type="button" class="setting-btn">
+        <span data-icon="contrast"></span> Sáng / Tối
+      </button>
+    </section>
+
+    <!-- HISTORY -->
+    <section class="card">
+      <button id="btnToggleHistory" type="button" class="hist-head" aria-expanded="true" aria-controls="historyBody">
+        <div class="grow">
+          <h2>Lịch sử cộng / trừ</h2>
+          <p>Mốc giờ:phút:giây để đối chiếu</p>
+        </div>
+        <span id="historyCount" class="count-badge num">0</span>
+        <span class="chev" data-icon="chevron"></span>
+      </button>
+      <div id="historyBody">
+        <div id="historyFilterChips" class="chips" role="group" aria-label="Lọc theo người chơi"></div>
+        <ol id="historyListContainer" class="h-list"></ol>
+      </div>
+    </section>
+  </main>
+
+  <!-- 15-SECOND IMBALANCE ALERT -->
+  <div id="bannerImbalanceAlert" class="alert" role="alertdialog" aria-labelledby="txtAlertTitle" hidden>
+    <div class="wrap">
+      <div class="alert-card">
+        <div class="alert-top">
+          <span class="alert-ic" data-icon="alert"></span>
+          <div>
+            <div id="txtAlertTitle" class="alert-title num">Tổng bàn đang lệch</div>
+            <div class="alert-sub">15 giây không nhập thêm — kiểm tra lại nhé</div>
+          </div>
+          <button id="btnDismissAlert" type="button" class="alert-close" aria-label="Ẩn cảnh báo" data-icon="x"></button>
+        </div>
+        <p id="txtAlertRootCause" class="alert-cause"></p>
+        <div id="txtAlertCurrentScores" class="snap num"></div>
+        <div id="lblQuickFix" class="fix-label">Sửa nhanh 1 chạm</div>
+        <div id="boxQuickFixes" class="fixes num"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SHEET 1: ADD / EDIT PLAYER -->
+  <div id="modalPlayerForm" class="sheet-backdrop" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modalPlayerTitle">
+      <div class="sheet-handle"></div>
+      <h3 id="modalPlayerTitle">Thêm người chơi mới</h3>
+      <input id="inputPlayerName" class="field" type="text" maxlength="24" autocomplete="off" enterkeyhint="done"
+        placeholder="Nhập tên (VD: Anh Tuấn, Hùng...)" />
+      <div class="sheet-actions">
+        <button id="btnCancelPlayerModal" type="button" class="btn ghost">Huỷ</button>
+        <button id="btnSavePlayerModal" type="button" class="btn primary">Lưu</button>
+      </div>
+      <button id="btnDeletePlayer" type="button" class="btn-link-danger" hidden>
+        <span data-icon="trash"></span><span id="txtDeletePlayer">Xoá người chơi này</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- SHEET 2: CONFIRM RESET -->
+  <div id="modalConfirmReset" class="sheet-backdrop" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ttlReset">
+      <div class="sheet-handle"></div>
+      <h3 id="ttlReset">Bắt đầu ván mới?</h3>
+      <p>Điểm của tất cả người chơi và lịch sử sẽ về 0. Danh sách tên người chơi vẫn được giữ nguyên.</p>
+      <div class="sheet-actions">
+        <button id="btnCancelReset" type="button" class="btn ghost">Không</button>
+        <button id="btnConfirmReset" type="button" class="btn danger">Xoá điểm về 0</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHEET 3: CONFIRM DELETE PLAYER -->
+  <div id="modalConfirmDelete" class="sheet-backdrop" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ttlDelete">
+      <div class="sheet-handle"></div>
+      <h3 id="ttlDelete">Xoá người chơi?</h3>
+      <p id="txtDeleteInfo"></p>
+      <div class="sheet-actions">
+        <button id="btnCancelDelete" type="button" class="btn ghost">Không</button>
+        <button id="btnConfirmDelete" type="button" class="btn danger">Xoá người chơi</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const $ = (id) => document.getElementById(id);
+
+      // =========================================================================
+      // 0. ICONS & SMALL HELPERS
+      // =========================================================================
+      const ICONS = {
+        undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+        plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+        reset: '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
+        volume: '<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>',
+        mute: '<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/>',
+        bulb: '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+        contrast: '<circle cx="12" cy="12" r="9"/><path d="M12 21a9 9 0 0 0 0-18z" fill="currentColor"/>',
+        x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+        pencil: '<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>',
+        crown: '<path d="m2 6 4 11h12l4-11-6 5-4-7-4 7-6-5z" fill="currentColor"/>',
+        alert: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+        chevron: '<path d="m6 9 6 6 6-6"/>',
+        expand: '<path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/>',
+        shrink: '<path d="M4 14h6v6"/><path d="M20 10h-6V4"/><path d="M14 10l7-7"/><path d="M3 21l7-7"/>',
+        trash: '<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>'
+      };
+      function icon(name, cls = "") {
+        return `<svg class="ic ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
+      }
+      function hydrateIcons(root = document) {
+        root.querySelectorAll("[data-icon]").forEach(el => {
+          el.innerHTML = icon(el.getAttribute("data-icon"));
+        });
+      }
+
+      function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+      }
+
+      // Pool-ball colors 1..8; numbers 9..15 reuse them as stripes
+      const BALL_COLORS = ["#f2b705", "#1d4ed8", "#dc2626", "#7c3aed", "#ea580c", "#15803d", "#9f1239", "#18181b"];
+      function ballColor(idx) {
+        return BALL_COLORS[idx % 8];
+      }
+      // Each player keeps their own ball number (and color) even when others are removed
+      function ballIdx(player) {
+        return (player.ball || 1) - 1;
+      }
+      function nextFreeBall() {
+        const used = new Set(state.players.map(p => p.ball));
+        let n = 1;
+        while (used.has(n)) n++;
+        return n;
+      }
+      function ensureBallNumbers() {
+        state.players.forEach(p => {
+          if (!p.ball || state.players.some(o => o !== p && o.ball === p.ball)) {
+            p.ball = 0;
+            p.ball = nextFreeBall();
+          }
+        });
+      }
+      function ballHtml(idx, size = "") {
+        if (idx < 0) return `<span class="ball ${size}"><i>?</i></span>`;
+        const n = idx + 1;
+        const color = ballColor(idx);
+        const stripe = Math.floor((n - 1) / 8) % 2 === 1;
+        return `<span class="ball ${size} ${stripe ? "stripe" : ""}" style="--ball:${color}"><i>${n}</i></span>`;
+      }
+
+      let toastTimer = null;
+      function toast(msg) {
+        const el = $("toast");
+        el.textContent = msg;
+        el.hidden = true;
+        void el.offsetWidth;
+        el.hidden = false;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => { el.hidden = true; }, 2200);
+      }
+
+      function haptic(ms) {
+        try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {}
+      }
+
+      // =========================================================================
+      // 1. SOUND ENGINE (SUBTLE BEEP FOR TAPS & CHIME FOR 15S IMBALANCE WARNING)
+      // =========================================================================
+      const AudioAlert = {
+        ctx: null,
+        muted: false,
+        init() {
+          if (!this.ctx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) this.ctx = new AudioCtx();
+          }
+          if (this.ctx && this.ctx.state === "suspended") {
+            this.ctx.resume();
+          }
+        },
+        playTap(isPositive) {
+          if (this.muted) return;
+          try {
+            this.init();
+            if (!this.ctx) return;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(isPositive ? 580 : 390, this.ctx.currentTime);
+            gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.06);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start();
+            osc.stop(this.ctx.currentTime + 0.065);
+          } catch (e) {}
+        },
+        playWarningBeep() {
+          if (this.muted) return;
+          try {
+            this.init();
+            if (!this.ctx) return;
+            [0, 0.18, 0.36].forEach((offset) => {
+              const osc = this.ctx.createOscillator();
+              const gain = this.ctx.createGain();
+              osc.type = "triangle";
+              osc.frequency.setValueAtTime(740, this.ctx.currentTime + offset);
+              gain.gain.setValueAtTime(0.25, this.ctx.currentTime + offset);
+              gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + offset + 0.12);
+              osc.connect(gain);
+              gain.connect(this.ctx.destination);
+              osc.start(this.ctx.currentTime + offset);
+              osc.stop(this.ctx.currentTime + offset + 0.13);
+            });
+          } catch (e) {}
+        }
+      };
+
+      // =========================================================================
+      // 2. STATE & STORAGE PERSISTENCE
+      // =========================================================================
+      const STORAGE_KEY = "bida_369_light_scoreboard_v1";
+      const PREFS_KEY = "bida_369_prefs_v1";
+
+      const state = {
+        players: [
+          { id: "p1", name: "Người chơi A", score: 0 },
+          { id: "p2", name: "Người chơi B", score: 0 },
+          { id: "p3", name: "Người chơi C", score: 0 }
+        ],
+        // History item: { id, timeStr, timestamp, playerId, playerName, delta, prevScore, newScore, totalSumAfter, batchId }
+        history: [],
+        currentBatchId: 1,
+        lastChangeTimestamp: null,
+        countdownSecLeft: 0,
+        warningTriggeredForCurrentState: false,
+        warningDismissed: false,
+        editingPlayerId: null,
+        historyFilter: "all",
+        lastTap: null
+      };
+
+      // Per-device preferences (theme, sound, keep-awake, history panel)
+      const prefs = { theme: null, muted: false, wake: false, historyOpen: true, fullscreen: false };
+
+      function saveToStorage() {
+        try {
+          localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({
+              players: state.players,
+              history: state.history,
+              currentBatchId: state.currentBatchId
+            })
+          );
+        } catch (e) {}
+      }
+
+      function loadFromStorage() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed.players) && parsed.players.length > 0) {
+              state.players = parsed.players;
+            }
+            if (Array.isArray(parsed.history)) {
+              state.history = parsed.history;
+            }
+            if (typeof parsed.currentBatchId === "number") {
+              state.currentBatchId = parsed.currentBatchId;
+            }
+          }
+        } catch (e) {}
+        try {
+          Object.assign(prefs, JSON.parse(localStorage.getItem(PREFS_KEY) || "{}"));
+        } catch (e) {}
+      }
+
+      function savePrefs() {
+        try { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); } catch (e) {}
+      }
+
+      // =========================================================================
+      // 3. SCORE CALCULATION & ROOT-CAUSE IMBALANCE DIAGNOSTICS
+      // =========================================================================
+      function getTotalScoreSum() {
+        return state.players.reduce((acc, p) => acc + p.score, 0);
+      }
+
+      function formatTimeHMS(dateObj) {
+        const hh = String(dateObj.getHours()).padStart(2, "0");
+        const mm = String(dateObj.getMinutes()).padStart(2, "0");
+        const ss = String(dateObj.getSeconds()).padStart(2, "0");
+        return `${hh}:${mm}:${ss}`;
+      }
+
+      function formatSigned(val) {
+        return val > 0 ? `+${val}` : `${val}`;
+      }
+
+      function signClass(val) {
+        return val > 0 ? "pos" : val < 0 ? "neg" : "zero";
+      }
+
+      function applyScoreDelta(playerId, delta) {
+        const player = state.players.find(p => p.id === playerId);
+        if (!player) return;
+
+        AudioAlert.playTap(delta > 0);
+        haptic(10);
+
+        const prevSum = getTotalScoreSum();
+        // If table was balanced (sum == 0) before this tap, start a new transaction batch!
+        // This lets us isolate the exact batch of taps that caused any new imbalance.
+        if (prevSum === 0) {
+          state.currentBatchId += 1;
+        }
+
+        const prevScore = player.score;
+        player.score += delta;
+        const newScore = player.score;
+        const newSum = getTotalScoreSum();
+
+        const now = new Date();
+        const entry = {
+          id: "log_" + now.getTime() + "_" + Math.random().toString(36).slice(2, 6),
+          timeStr: formatTimeHMS(now),
+          timestamp: now.getTime(),
+          playerId: player.id,
+          playerName: player.name,
+          delta: delta,
+          prevScore: prevScore,
+          newScore: newScore,
+          totalSumAfter: newSum,
+          batchId: state.currentBatchId
+        };
+
+        state.history.unshift(entry);
+        state.lastChangeTimestamp = Date.now();
+        state.warningTriggeredForCurrentState = false;
+        state.warningDismissed = false;
+        state.lastTap = { pid: player.id, delta };
+
+        if (newSum !== 0) {
+          state.countdownSecLeft = 15;
+        } else {
+          state.countdownSecLeft = 0;
+        }
+
+        saveToStorage();
+        renderAll();
+      }
+
+      function undoLastAction() {
+        if (state.history.length === 0) return;
+        const last = state.history.shift();
+        const player = state.players.find(p => p.id === last.playerId);
+        if (player) {
+          player.score = last.prevScore;
+        }
+
+        const newSum = getTotalScoreSum();
+        state.lastChangeTimestamp = Date.now();
+        state.warningTriggeredForCurrentState = false;
+        state.warningDismissed = false;
+        state.countdownSecLeft = newSum !== 0 ? 15 : 0;
+
+        haptic(15);
+        saveToStorage();
+        renderAll();
+        toast(`Đã hoàn tác: ${last.playerName} ${formatSigned(last.delta)}đ`);
+      }
+
+      /**
+       * Analyzes the recent actions since the last time the scoreboard was balanced (sum === 0)
+       * to explain the exact cause of the discrepancy (e.g., "+ A 3 điểm nhưng lại - B 4đ").
+       */
+      function analyzeImbalanceCause() {
+        const totalSum = getTotalScoreSum();
+        if (totalSum === 0) return null;
+
+        // Collect all logs since the last time totalSumAfter === 0
+        const recentCluster = [];
+        for (let i = 0; i < state.history.length; i++) {
+          const item = state.history[i];
+          recentCluster.push(item);
+          // Look ahead: if the entry before this one in chronological order had totalSumAfter === 0, stop
+          const olderItem = state.history[i + 1];
+          if (!olderItem || olderItem.totalSumAfter === 0) {
+            break;
+          }
+        }
+
+        // Reverse to chronological order
+        recentCluster.reverse();
+
+        // Aggregate net changes per player in this unbalanced cluster
+        const netByPlayer = new Map();
+        recentCluster.forEach(item => {
+          const prev = netByPlayer.get(item.playerId) || { name: item.playerName, net: 0 };
+          prev.net += item.delta;
+          netByPlayer.set(item.playerId, prev);
+        });
+
+        const plusParts = [];
+        const minusParts = [];
+        netByPlayer.forEach(info => {
+          const name = escapeHtml(info.name);
+          if (info.net > 0) plusParts.push(`cộng <b>${name} +${info.net}đ</b>`);
+          else if (info.net < 0) minusParts.push(`trừ <b>${name} ${info.net}đ</b>`);
+        });
+
+        const startTime = recentCluster.length > 0 ? recentCluster[0].timeStr : "";
+        let causeHtml = "";
+
+        if (plusParts.length > 0 && minusParts.length > 0) {
+          causeHtml = `Từ lúc <b>${startTime}</b>, bạn đã ${plusParts.join(" và ")} nhưng lại ${minusParts.join(" và ")} `;
+          if (totalSum < 0) {
+            causeHtml += `→ đang <b>trừ dư ${Math.abs(totalSum)}đ</b> hoặc thiếu cộng +${Math.abs(totalSum)}đ.`;
+          } else {
+            causeHtml += `→ đang <b>cộng dư +${totalSum}đ</b> hoặc thiếu trừ -${totalSum}đ.`;
+          }
+        } else if (plusParts.length > 0) {
+          causeHtml = `Lúc <b>${startTime}</b>, bạn đã ${plusParts.join(" và ")} nhưng <b>chưa trừ ${-totalSum}đ</b> của người bị đền.`;
+        } else if (minusParts.length > 0) {
+          causeHtml = `Lúc <b>${startTime}</b>, bạn đã ${minusParts.join(" và ")} nhưng <b>chưa cộng +${Math.abs(totalSum)}đ</b> cho người ăn bi.`;
+        } else {
+          causeHtml = `Tổng điểm toàn bàn đang lệch <b>${formatSigned(totalSum)}đ</b> (tổng đúng phải bằng 0đ).`;
+        }
+
+        // Quick fixes: offer the missing delta to every player (if within a sane range)
+        const neededDelta = -totalSum;
+        const quickFixes = [];
+        if (Math.abs(neededDelta) >= 1 && Math.abs(neededDelta) <= 6) {
+          state.players.forEach((p, idx) => {
+            quickFixes.push({ playerId: p.id, playerName: p.name, idx, delta: neededDelta });
+          });
+        }
+
+        return { totalSum, causeHtml, quickFixes };
+      }
+
+      // =========================================================================
+      // 4. 15-SECOND INACTIVITY TIMER LOOP
+      // =========================================================================
+      setInterval(() => {
+        const sum = getTotalScoreSum();
+        if (sum === 0) {
+          state.countdownSecLeft = 0;
+          state.warningTriggeredForCurrentState = false;
+          updateCountdownAndBannerUI();
+          return;
+        }
+
+        if (!state.warningTriggeredForCurrentState) {
+          const elapsedMs = state.lastChangeTimestamp
+            ? Date.now() - state.lastChangeTimestamp
+            : 15000;
+          const remaining = Math.max(0, Math.ceil((15000 - elapsedMs) / 1000));
+          state.countdownSecLeft = remaining;
+
+          if (remaining === 0) {
+            state.warningTriggeredForCurrentState = true;
+            AudioAlert.playWarningBeep();
+            haptic([80, 60, 80]);
+          }
+          updateCountdownAndBannerUI();
+        }
+      }, 250);
+
+      function triggerImmediateCheck() {
+        const sum = getTotalScoreSum();
+        if (sum !== 0) {
+          state.countdownSecLeft = 0;
+          state.warningTriggeredForCurrentState = true;
+          state.warningDismissed = false;
+          AudioAlert.playWarningBeep();
+          updateCountdownAndBannerUI();
+        }
+      }
+
+      // =========================================================================
+      // 5. UI RENDERERS
+      // =========================================================================
+      function updateCountdownAndBannerUI() {
+        const sum = getTotalScoreSum();
+        const strip = $("statusStrip");
+        const txt = $("txtStatus");
+        const btn = $("btnCheckNow");
+        const progress = $("statusProgress");
+        const banner = $("bannerImbalanceAlert");
+
+        if (sum === 0) {
+          strip.className = "status is-ok";
+          txt.innerHTML = `Tổng bàn <b>0đ</b> · Đã cân bằng`;
+          btn.hidden = true;
+          progress.style.width = "0%";
+          banner.hidden = true;
+          return;
+        }
+
+        if (!state.warningTriggeredForCurrentState) {
+          // Still counting down the 15s grace period
+          const elapsedMs = state.lastChangeTimestamp ? Date.now() - state.lastChangeTimestamp : 15000;
+          strip.className = "status is-pending";
+          txt.innerHTML = `Lệch <b>${formatSigned(sum)}đ</b> · tự kiểm tra sau <b>${state.countdownSecLeft}s</b>`;
+          btn.hidden = false;
+          btn.textContent = "Kiểm tra ngay";
+          btn.dataset.mode = "check";
+          progress.style.width = Math.max(0, 100 - elapsedMs / 150) + "%";
+          banner.hidden = true;
+          return;
+        }
+
+        // 15 seconds elapsed without changes -> detailed imbalance alert
+        strip.className = "status is-alert";
+        txt.innerHTML = `Lệch <b>${formatSigned(sum)}đ</b> · Cần kiểm tra lại`;
+        progress.style.width = "0%";
+        btn.hidden = !state.warningDismissed;
+        btn.textContent = "Xem chi tiết";
+        btn.dataset.mode = "show";
+
+        if (state.warningDismissed) {
+          banner.hidden = true;
+          return;
+        }
+
+        const diag = analyzeImbalanceCause();
+        if (!diag) return;
+
+        $("txtAlertTitle").textContent = `Tổng bàn đang lệch ${formatSigned(diag.totalSum)}đ`;
+        $("txtAlertRootCause").innerHTML = diag.causeHtml;
+        $("txtAlertCurrentScores").innerHTML = state.players.map((p, idx) => `
+          <span class="snap-item">${ballHtml(ballIdx(p), "sm")}${escapeHtml(p.name)} <b class="${signClass(p.score)}">${formatSigned(p.score)}</b></span>
+        `).join("");
+
+        $("lblQuickFix").hidden = diag.quickFixes.length === 0;
+        $("boxQuickFixes").innerHTML = diag.quickFixes.map(fx => `
+          <button type="button" class="fix-btn" data-fix-player="${fx.playerId}" data-fix-delta="${fx.delta}">
+            <b class="${signClass(fx.delta)}">${formatSigned(fx.delta)}</b> ${escapeHtml(fx.playerName)}
+          </button>
+        `).join("");
+
+        banner.hidden = false;
+      }
+
+      function renderHeader() {
+        $("lblSubStatus").textContent = `${state.players.length} người chơi`;
+
+        const last = state.history[0];
+        $("btnUndoLast").disabled = !last;
+        $("btnUndoTop").disabled = !last;
+        $("txtUndoDetail").textContent = last
+          ? `${last.playerName} ${formatSigned(last.delta)}đ · ${last.timeStr}`
+          : "Chưa có thao tác";
+      }
+
+      function renderPlayers() {
+        const container = $("playersContainer");
+
+        const maxScore = Math.max(...state.players.map(p => p.score));
+        const leaders = state.players.filter(p => p.score === maxScore);
+        const leaderId = maxScore > 0 && leaders.length === 1 ? leaders[0].id : null;
+
+        container.innerHTML = state.players.map((p, idx) => {
+          const lastPlayerLog = state.history.find(h => h.playerId === p.id);
+          const lastLogText = lastPlayerLog
+            ? `Vừa ${formatSigned(lastPlayerLog.delta)}đ · ${lastPlayerLog.timeStr}`
+            : "Chạm tên để đổi tên";
+          const keys = (sign, cls) => [1, 2, 3]
+            .map(n => sign * n)
+            .map(d => `<button type="button" class="key ${cls}" data-pid="${p.id}" data-delta="${d}" aria-label="${formatSigned(d)} điểm cho ${escapeHtml(p.name)}">${formatSigned(d)}</button>`)
+            .join("");
+
+          return `
+            <article class="player" style="--tint:${ballColor(ballIdx(p))}"><div class="player-inner">
+              <div class="pad-row">${keys(1, "plus")}</div>
+              <div class="player-mid">
+                <button type="button" class="btn-del" data-remove-id="${p.id}" aria-label="Xoá người chơi ${escapeHtml(p.name)}" title="Xoá người chơi">${icon("trash")}</button>
+                <button type="button" class="player-id" data-edit-id="${p.id}" aria-label="Sửa người chơi ${escapeHtml(p.name)}">
+                  ${ballHtml(ballIdx(p))}
+                  <span class="pname">
+                    <span>${escapeHtml(p.name)}</span>
+                    ${p.id === leaderId ? icon("crown", "crown") : icon("pencil")}
+                  </span>
+                </button>
+                <div class="score ${signClass(p.score)}" data-score="${p.id}">${formatSigned(p.score)}<small>đ</small></div>
+                <span class="plast num">${lastLogText}</span>
+              </div>
+              <div class="pad-row">${keys(-1, "minus")}</div>
+            </div></article>
+          `;
+        }).join("");
+      }
+
+      // Slim bar shown in fullscreen mode: table total + undo
+      function renderFsBar() {
+        const sum = getTotalScoreSum();
+        const sumEl = $("fsSum");
+        sumEl.innerHTML = sum === 0 ? `Tổng bàn <b>0đ</b> · Cân bằng` : `Lệch <b>${formatSigned(sum)}đ</b>`;
+        sumEl.classList.toggle("off", sum !== 0);
+        $("btnFsUndo").disabled = state.history.length === 0;
+      }
+
+      // Score "bump" + floating delta right after a tap
+      function animateLastTap() {
+        const t = state.lastTap;
+        state.lastTap = null;
+        if (!t) return;
+        const scoreEl = document.querySelector(`[data-score="${CSS.escape(t.pid)}"]`);
+        if (!scoreEl) return;
+        scoreEl.classList.add("bump");
+        const fly = document.createElement("span");
+        fly.className = "fly " + signClass(t.delta);
+        fly.textContent = formatSigned(t.delta);
+        scoreEl.appendChild(fly);
+      }
+
+      function renderFilterChips() {
+        const box = $("historyFilterChips");
+        if (state.historyFilter !== "all" && !state.players.some(p => p.id === state.historyFilter)) {
+          state.historyFilter = "all";
+        }
+        let html = `<button type="button" class="chip all" data-filter="all" aria-pressed="${state.historyFilter === "all"}">Tất cả</button>`;
+        state.players.forEach((p, idx) => {
+          const count = state.history.filter(h => h.playerId === p.id).length;
+          html += `<button type="button" class="chip" data-filter="${p.id}" aria-pressed="${state.historyFilter === p.id}">${ballHtml(ballIdx(p), "sm")}${escapeHtml(p.name)} <span class="num">${count}</span></button>`;
+        });
+        box.innerHTML = html;
+      }
+
+      function renderHistory() {
+        const listEl = $("historyListContainer");
+        const filterVal = state.historyFilter;
+        const filtered =
+          filterVal === "all"
+            ? state.history
+            : state.history.filter(h => h.playerId === filterVal);
+
+        $("historyCount").textContent = state.history.length;
+        $("btnToggleHistory").setAttribute("aria-expanded", String(prefs.historyOpen));
+        $("historyBody").hidden = !prefs.historyOpen;
+
+        if (filtered.length === 0) {
+          listEl.innerHTML = `<li class="h-empty">Chưa có lần cộng/trừ điểm nào.<br>Bấm các nút <b>+</b> / <b>−</b> ở trên để bắt đầu.</li>`;
+          return;
+        }
+
+        listEl.innerHTML = filtered.map(item => {
+          const owner = state.players.find(p => p.id === item.playerId);
+          const idx = owner ? ballIdx(owner) : -1;
+          const balanceNote =
+            item.totalSumAfter === 0
+              ? `<span class="ok">✓ Cân bằng</span>`
+              : `<span class="off">Tổng ${formatSigned(item.totalSumAfter)}</span>`;
+          return `
+            <li class="h-item num">
+              <span class="h-time">${item.timeStr}</span>
+              ${ballHtml(idx, "sm")}
+              <div class="h-main">
+                <div class="h-name">${escapeHtml(item.playerName)}</div>
+                <div class="h-meta">${formatSigned(item.prevScore)} → <b>${formatSigned(item.newScore)}</b> · ${balanceNote}</div>
+              </div>
+              <span class="h-delta ${signClass(item.delta)}">${formatSigned(item.delta)}</span>
+            </li>
+          `;
+        }).join("");
+      }
+
+      function renderAll() {
+        renderHeader();
+        renderPlayers();
+        renderFilterChips();
+        renderHistory();
+        renderFsBar();
+        updateCountdownAndBannerUI();
+        animateLastTap();
+      }
+
+      // Fullscreen mode: hides everything except the player cards (same cards, bigger);
+      // also asks the browser for real fullscreen where supported (Android/desktop)
+      function isFullscreen() {
+        return document.documentElement.classList.contains("fs-open");
+      }
+      function openFullscreen() {
+        document.documentElement.classList.add("fs-open");
+        window.scrollTo(0, 0);
+        prefs.fullscreen = true;
+        savePrefs();
+        const el = document.documentElement;
+        if (el.requestFullscreen && !document.fullscreenElement) el.requestFullscreen().catch(() => {});
+      }
+      function closeFullscreen() {
+        document.documentElement.classList.remove("fs-open");
+        prefs.fullscreen = false;
+        savePrefs();
+        if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
+      }
+
+      // =========================================================================
+      // 6. PLAYER ADD / EDIT / REMOVE & RESET HANDLERS
+      // =========================================================================
+      function openSheet(id) {
+        $(id).hidden = false;
+      }
+      function closeSheet(id) {
+        $(id).hidden = true;
+      }
+
+      function openPlayerModal(editPlayerId = null) {
+        state.editingPlayerId = editPlayerId;
+        const title = $("modalPlayerTitle");
+        const input = $("inputPlayerName");
+        const delBtn = $("btnDeletePlayer");
+        delBtn.dataset.confirm = "0";
+        $("txtDeletePlayer").textContent = "Xoá người chơi này";
+
+        if (editPlayerId) {
+          const p = state.players.find(item => item.id === editPlayerId);
+          title.textContent = "Đổi tên người chơi";
+          input.value = p ? p.name : "";
+          delBtn.hidden = state.players.length <= 2;
+        } else {
+          title.textContent = "Thêm người chơi mới";
+          input.value = "";
+          delBtn.hidden = true;
+        }
+
+        openSheet("modalPlayerForm");
+        setTimeout(() => { input.focus(); input.select(); }, 60);
+      }
+
+      function savePlayerFromModal() {
+        const input = $("inputPlayerName");
+        const name = input.value.trim();
+        if (!name) { input.focus(); return; }
+
+        if (state.editingPlayerId) {
+          const p = state.players.find(item => item.id === state.editingPlayerId);
+          if (p) {
+            p.name = name;
+            // Also update display name in history logs for clarity
+            state.history.forEach(h => {
+              if (h.playerId === p.id) h.playerName = name;
+            });
+          }
+        } else {
+          const newId = "p_" + Date.now() + "_" + Math.random().toString(36).slice(2, 5);
+          state.players.push({ id: newId, name: name, score: 0, ball: nextFreeBall() });
+          toast(`Đã thêm ${name}`);
+        }
+
+        closeSheet("modalPlayerForm");
+        state.editingPlayerId = null;
+        saveToStorage();
+        renderAll();
+      }
+
+      let pendingDeleteId = null;
+      function openDeleteConfirm(playerId) {
+        if (state.players.length <= 2) {
+          toast("Cần ít nhất 2 người chơi trên bàn");
+          return;
+        }
+        const p = state.players.find(item => item.id === playerId);
+        if (!p) return;
+        pendingDeleteId = playerId;
+        $("ttlDelete").textContent = `Xoá ${p.name}?`;
+        $("txtDeleteInfo").textContent = p.score !== 0
+          ? `${p.name} đang có ${formatSigned(p.score)}đ. Xoá đi thì tổng bàn sẽ lệch ${formatSigned(-p.score)}đ — nên tính tiền xong rồi hãy xoá.`
+          : `${p.name} sẽ bị xoá khỏi bàn. Lịch sử cũ của người này vẫn được giữ lại.`;
+        openSheet("modalConfirmDelete");
+      }
+
+      function removePlayer(playerId) {
+        if (state.players.length <= 2) return;
+        const removed = state.players.find(p => p.id === playerId);
+        state.players = state.players.filter(p => p.id !== playerId);
+        state.lastChangeTimestamp = Date.now();
+        state.warningTriggeredForCurrentState = false;
+        state.countdownSecLeft = getTotalScoreSum() !== 0 ? 15 : 0;
+        saveToStorage();
+        renderAll();
+        if (removed) toast(`Đã xoá ${removed.name}`);
+      }
+
+      function resetAllScoresToZero() {
+        state.players.forEach(p => { p.score = 0; });
+        state.history = [];
+        state.currentBatchId = 1;
+        state.lastChangeTimestamp = null;
+        state.countdownSecLeft = 0;
+        state.warningTriggeredForCurrentState = false;
+        state.warningDismissed = false;
+        closeSheet("modalConfirmReset");
+        saveToStorage();
+        renderAll();
+        toast("Đã bắt đầu ván mới");
+      }
+
+      // =========================================================================
+      // 7. DEVICE FEATURES: THEME, SOUND, KEEP SCREEN AWAKE
+      // =========================================================================
+      function isDarkTheme() {
+        if (prefs.theme) return prefs.theme === "dark";
+        return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      }
+
+      function applyTheme() {
+        if (prefs.theme) document.documentElement.dataset.theme = prefs.theme;
+        else delete document.documentElement.dataset.theme;
+        $("metaThemeColor").setAttribute("content", isDarkTheme() ? "#0b100d" : "#f3f4f1");
+      }
+
+      function applyAudioButton() {
+        const btn = $("btnToggleAudio");
+        btn.setAttribute("aria-pressed", String(!AudioAlert.muted));
+        btn.innerHTML = icon(AudioAlert.muted ? "mute" : "volume");
+      }
+
+      // Screen Wake Lock: keeps the phone screen on while scoring at the table
+      const Wake = {
+        sentinel: null,
+        supported: "wakeLock" in navigator,
+        async acquire() {
+          if (!this.supported || this.sentinel || document.visibilityState !== "visible") return;
+          try {
+            this.sentinel = await navigator.wakeLock.request("screen");
+            this.sentinel.addEventListener("release", () => {
+              this.sentinel = null;
+              applyWakeButton();
+            });
+          } catch (e) {
+            this.sentinel = null;
+          }
+          applyWakeButton();
+        },
+        release() {
+          if (this.sentinel) this.sentinel.release().catch(() => {});
+          this.sentinel = null;
+        }
+      };
+
+      function applyWakeButton() {
+        $("btnWake").setAttribute("aria-pressed", String(prefs.wake && !!Wake.sentinel));
+      }
+
+      async function toggleWake() {
+        if (!Wake.supported) {
+          toast("Trình duyệt này chưa hỗ trợ giữ sáng màn hình");
+          return;
+        }
+        prefs.wake = !prefs.wake;
+        savePrefs();
+        if (prefs.wake) {
+          await Wake.acquire();
+          toast(Wake.sentinel ? "Màn hình sẽ luôn sáng" : "Không bật được giữ sáng (cần mở qua https)");
+        } else {
+          Wake.release();
+          toast("Đã tắt giữ sáng màn hình");
+        }
+        applyWakeButton();
+      }
+
+      // =========================================================================
+      // 8. WIRE UP CONTROLS
+      // =========================================================================
+      $("playersContainer").addEventListener("click", (e) => {
+        const key = e.target.closest("[data-delta]");
+        if (key) {
+          applyScoreDelta(key.dataset.pid, Number(key.dataset.delta));
+          return;
+        }
+        const del = e.target.closest("[data-remove-id]");
+        if (del) {
+          openDeleteConfirm(del.dataset.removeId);
+          return;
+        }
+        const edit = e.target.closest("[data-edit-id]");
+        if (edit) openPlayerModal(edit.dataset.editId);
+      });
+
+      $("btnFullscreen").addEventListener("click", openFullscreen);
+      $("btnFsExit").addEventListener("click", closeFullscreen);
+      $("btnFsUndo").addEventListener("click", undoLastAction);
+      // Leaving browser fullscreen (Esc / back gesture) also leaves fullscreen mode
+      document.addEventListener("fullscreenchange", () => {
+        if (!document.fullscreenElement && isFullscreen()) closeFullscreen();
+      });
+
+      $("boxQuickFixes").addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-fix-player]");
+        if (!btn) return;
+        applyScoreDelta(btn.dataset.fixPlayer, Number(btn.dataset.fixDelta));
+      });
+
+      $("historyFilterChips").addEventListener("click", (e) => {
+        const chip = e.target.closest("[data-filter]");
+        if (!chip) return;
+        state.historyFilter = chip.dataset.filter;
+        renderFilterChips();
+        renderHistory();
+      });
+
+      $("btnToggleHistory").addEventListener("click", () => {
+        prefs.historyOpen = !prefs.historyOpen;
+        savePrefs();
+        renderHistory();
+      });
+
+      $("btnOpenAddPlayer").addEventListener("click", () => openPlayerModal(null));
+      $("btnCancelPlayerModal").addEventListener("click", () => closeSheet("modalPlayerForm"));
+      $("btnSavePlayerModal").addEventListener("click", savePlayerFromModal);
+      $("inputPlayerName").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") savePlayerFromModal();
+      });
+      $("btnDeletePlayer").addEventListener("click", (e) => {
+        const btn = e.currentTarget;
+        if (btn.dataset.confirm !== "1") {
+          btn.dataset.confirm = "1";
+          $("txtDeletePlayer").textContent = "Bấm lần nữa để xác nhận xoá";
+          return;
+        }
+        const pid = state.editingPlayerId;
+        closeSheet("modalPlayerForm");
+        state.editingPlayerId = null;
+        removePlayer(pid);
+      });
+
+      $("btnUndoLast").addEventListener("click", undoLastAction);
+      $("btnUndoTop").addEventListener("click", undoLastAction);
+
+      // Players area = one screen below the sticky top bar; track the bar's real height
+      const topbar = document.querySelector(".topbar");
+      const syncTopHeight = () => document.documentElement.style.setProperty("--top-h", topbar.offsetHeight + "px");
+      if (window.ResizeObserver) new ResizeObserver(syncTopHeight).observe(topbar);
+      syncTopHeight();
+
+      $("btnOpenResetModal").addEventListener("click", () => openSheet("modalConfirmReset"));
+      $("btnCancelReset").addEventListener("click", () => closeSheet("modalConfirmReset"));
+      $("btnConfirmReset").addEventListener("click", resetAllScoresToZero);
+
+      $("btnCancelDelete").addEventListener("click", () => closeSheet("modalConfirmDelete"));
+      $("btnConfirmDelete").addEventListener("click", () => {
+        closeSheet("modalConfirmDelete");
+        if (pendingDeleteId) removePlayer(pendingDeleteId);
+        pendingDeleteId = null;
+      });
+
+      // Tap on the dimmed backdrop closes a sheet
+      document.querySelectorAll(".sheet-backdrop").forEach(el => {
+        el.addEventListener("click", (e) => {
+          if (e.target === el) el.hidden = true;
+        });
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") document.querySelectorAll(".sheet-backdrop").forEach(el => { el.hidden = true; });
+      });
+
+      $("btnCheckNow").addEventListener("click", (e) => {
+        if (e.currentTarget.dataset.mode === "show") {
+          state.warningDismissed = false;
+          updateCountdownAndBannerUI();
+        } else {
+          triggerImmediateCheck();
+        }
+      });
+      $("btnDismissAlert").addEventListener("click", () => {
+        state.warningDismissed = true;
+        updateCountdownAndBannerUI();
+      });
+
+      $("btnToggleAudio").addEventListener("click", () => {
+        AudioAlert.muted = !AudioAlert.muted;
+        prefs.muted = AudioAlert.muted;
+        savePrefs();
+        applyAudioButton();
+        toast(AudioAlert.muted ? "Đã tắt âm báo" : "Đã bật âm báo");
+      });
+
+      $("btnTheme").addEventListener("click", () => {
+        prefs.theme = isDarkTheme() ? "light" : "dark";
+        savePrefs();
+        applyTheme();
+      });
+
+      $("btnWake").addEventListener("click", toggleWake);
+
+      // Wake lock is dropped when the tab is hidden; re-acquire on return / first tap
+      document.addEventListener("visibilitychange", () => {
+        if (prefs.wake && document.visibilityState === "visible") Wake.acquire();
+      });
+      document.addEventListener("pointerdown", () => {
+        if (prefs.wake && !Wake.sentinel) Wake.acquire();
+      }, { passive: true });
+
+      // Initialize App
+      hydrateIcons();
+      loadFromStorage();
+      ensureBallNumbers();
+      AudioAlert.muted = !!prefs.muted;
+      applyTheme();
+      applyAudioButton();
+      applyWakeButton();
+      if (prefs.wake) Wake.acquire();
+      // Restore fullscreen mode after a reload (browser fullscreen itself needs a tap)
+      if (prefs.fullscreen) document.documentElement.classList.add("fs-open");
+      if (getTotalScoreSum() !== 0) {
+        state.lastChangeTimestamp = Date.now();
+        state.countdownSecLeft = 15;
+      }
+      renderAll();
+    })();
+  </script>
+</body>
+</html>
